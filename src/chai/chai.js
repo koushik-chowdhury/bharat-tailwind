@@ -1,4 +1,3 @@
-console.log('Chai engine loaded');
 import { paddingStyles } from './padding.js';
 import { marginStyles } from './margin.js';
 import { fontStyles } from './font.js';
@@ -22,97 +21,90 @@ import { borderStyles } from './border.js';
     ...borderStyles,
   };
 
-  //  smarter value handler
   function applyValue(value, unit) {
-    // already has unit (rem, %, vh, etc.)
     if (/[a-z%]+$/i.test(value)) return value;
-
-    // no unit needed
     if (unit === false) return value;
-
-    // default px
     return value + (unit || 'px');
   }
 
-  const allElements = document.querySelectorAll('*');
+  function run() {
+    const allElements = document.querySelectorAll('*');
 
-  allElements.forEach((el) => {
-    el.classList.forEach((cls) => {
-      if (!cls.startsWith('chai-')) return;
+    allElements.forEach((el) => {
+      el.classList.forEach((cls) => {
+        if (!cls.startsWith('chai-')) return;
 
-      const raw = cls.replace('chai-', '');
-      const parts = raw.split('-');
+        const raw = cls.replace('chai-', '');
+        const parts = raw.split('-');
 
-      const key = parts[0];
-      const value = parts.slice(1).join('-');
+        const key = parts[0];
+        const value = parts.slice(1).join('-');
 
-      if (!styleMap[key]) return;
-      if (!value) return;
+        if (!styleMap[key]) return;
+        if (!value) return;
 
-      const { props, unit } = styleMap[key];
+        const { props, unit } = styleMap[key];
 
-      props.forEach((prop) => {
-        //  COLOR SYSTEM
-        if (key === 'text' || key === 'bg' || key === 'bc') {
-          const colorParts = value.split('-');
+        props.forEach((prop) => {
+          // COLORS
+          if (key === 'text' || key === 'bg' || key === 'bc') {
+            const [colorName, shade] = value.split('-');
+            const colorGroup = colors[colorName];
+            if (!colorGroup) return;
 
-          const colorName = colorParts[0];
-          const shade = colorParts[1];
+            const finalColor = shade ? colorGroup[shade] : colorGroup[500];
 
-          const colorGroup = colors[colorName];
-          if (!colorGroup) return;
+            if (!finalColor) return;
 
-          const finalColor = shade ? colorGroup[shade] : colorGroup[500];
+            el.style[prop] = finalColor;
+            return;
+          }
 
-          if (!finalColor) return;
+          // DISPLAY
+          if (key === 'd') {
+            const display = displayValues[value];
+            if (!display) return;
+            el.style[prop] = display;
+            return;
+          }
 
-          el.style[prop] = finalColor;
-          return;
-        }
+          // FLEX
+          if (key === 'flex') {
+            const dir = flexValues[value];
+            if (!dir) return;
+            el.style[prop] = dir;
+            return;
+          }
 
-        //  DISPLAY
-        if (key === 'd') {
-          const display = displayValues[value];
-          if (!display) return;
+          if (key === 'jc') {
+            const jc = justifyValues[value];
+            if (!jc) return;
+            el.style[prop] = jc;
+            return;
+          }
 
-          el.style[prop] = display;
-          return;
-        }
+          if (key === 'ai') {
+            const ai = alignValues[value];
+            if (!ai) return;
+            el.style[prop] = ai;
+            return;
+          }
 
-        //  FLEX DIRECTION
-        if (key === 'flex') {
-          const dir = flexValues[value];
-          if (!dir) return;
+          // BORDER FIX
+          if (key === 'border') {
+            el.style.borderStyle = 'solid';
+          }
 
-          el.style[prop] = dir;
-          return;
-        }
-
-        //  JUSTIFY CONTENT
-        if (key === 'jc') {
-          const jc = justifyValues[value];
-          if (!jc) return;
-
-          el.style[prop] = jc;
-          return;
-        }
-
-        //  ALIGN ITEMS
-        if (key === 'ai') {
-          const ai = alignValues[value];
-          if (!ai) return;
-
-          el.style[prop] = ai;
-          return;
-        }
-        // border
-        if (key === 'border') {
-          el.style.borderStyle = 'solid';
-        }
-
-        // DEFAULT HANDLER
-        el.style[prop] = applyValue(value, unit);
+          // DEFAULT
+          el.style[prop] = applyValue(value, unit);
+        });
       });
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
 })();
