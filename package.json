@@ -5,9 +5,7 @@
   "type": "module",
   "main": "dist/chai.cjs.js",
   "module": "dist/chai.esm.js",
-  "browser": "dist/chai.js",
-  "unpkg": "dist/chai.umd.js",
-  "jsdelivr": "dist/chai.umd.js",
+  "browser": "dist/chai.umd.js",
   "scripts": {
     "build": "rollup -c"
   },
