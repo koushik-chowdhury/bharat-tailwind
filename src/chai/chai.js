@@ -1,3 +1,4 @@
+console.log('Chai engine loaded');
 import { paddingStyles } from './padding.js';
 import { marginStyles } from './margin.js';
 import { fontStyles } from './font.js';

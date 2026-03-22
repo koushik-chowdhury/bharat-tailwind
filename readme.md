@@ -38,7 +38,7 @@ npm install bharat-tailwind
 
 ### Using CDN
 ```bash
-<script src="https://cdn.jsdelivr.net/npm/bharat-tailwind/dist/chai.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bharat-tailwind/dist/chai.umd.js"></script>
 ```
 
 ### Usage

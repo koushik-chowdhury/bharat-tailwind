@@ -1,9 +1,13 @@
 {
   "name": "bharat-tailwind",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "A runtime utility-first CSS engine powered by JS",
-  "main": "index.js",
   "type": "module",
+  "main": "dist/chai.cjs.js",
+  "module": "dist/chai.esm.js",
+  "browser": "dist/chai.js",
+  "unpkg": "dist/chai.umd.js",
+  "jsdelivr": "dist/chai.umd.js",
   "scripts": {
     "build": "rollup -c"
   },
@@ -17,11 +21,8 @@
   ],
   "author": "Kousik Chowdhury",
   "license": "MIT",
-  "unpkg": "dist/chai.js",
-  "jsdelivr": "dist/chai.js",
   "files": [
-    "dist",
-    "index.js"
+    "dist"
   ],
   "devDependencies": {
     "rollup": "^4.59.0"
